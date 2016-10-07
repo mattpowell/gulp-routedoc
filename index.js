@@ -7,20 +7,19 @@ module.exports = function (opts) {
   opts = opts || {};
 
   if (typeof opts.as !== 'string') {
-    opts.as = 'json'
+    opts.as = 'json';
   }
 
   return Through2.obj(function(file, encoding, callback) {
-
+    var routes = null;
+    var err;
+    
     if (['commonjs', 'amd', 'json', 'es6'].indexOf(opts.as.toLowerCase()) === -1) {
       this.emit('error', new Gutil.PluginError('gulp-routedoc', new Error('Unknown `as` option: ' + opts.as), {
         fileName: file.path
       }));
       return;
     }
-
-    var routes = null;
-    var err;
 
     try {
       routes = Routedoc({
